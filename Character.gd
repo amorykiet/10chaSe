@@ -3,27 +3,31 @@ extends KinematicBody2D
 enum {CHASE,ESCAPE}
 var state : int
 var velocity:= Vector2.ZERO
+signal catch_up(winner)
 
 const escape_speed: int = 400
-const chase_speed: int = 200
+const chase_speed: int = 300
 const WINDOW = OS.window_size
 
 var speed: int
-var chase_scale: int = 2
+var chase_scale: int = 5
 var escape_scale: int = 1
 
 func _ready():
-	state = ESCAPE
+	if name == "Black":
+		state = ESCAPE
+	elif name == "White":
+		state = CHASE
 
 func _physics_process(delta):
 	velocity = Vector2.ZERO
-	if Input.is_action_pressed("black_move_right"):
+	if Input.is_action_pressed(String(name).to_lower() + "_move_right"):
 		velocity.x = 1
-	elif Input.is_action_pressed("black_move_left"):
+	elif Input.is_action_pressed(String(name).to_lower() + "_move_left"):
 		velocity.x = -1
-	if Input.is_action_pressed("black_move_up"):
+	if Input.is_action_pressed(String(name).to_lower() + "_move_up"):
 		velocity.y = -1
-	elif Input.is_action_pressed("black_move_down"):
+	elif Input.is_action_pressed(String(name).to_lower() + "_move_down"):
 		velocity.y = 1
 	if state == CHASE:
 		scale = Vector2.ONE* chase_scale
@@ -43,4 +47,13 @@ func _physics_process(delta):
 	var collision = get_last_slide_collision()
 	if collision:
 		if state == ESCAPE:
-			queue_free()
+			visible = false
+		else:
+			emit_signal("catch_up", name)
+		
+
+func exchange():
+	if state == ESCAPE:
+		state = CHASE
+	elif state == CHASE:
+		state = ESCAPE
