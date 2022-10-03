@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://White.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Black.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Character.gd" type="Script" id=3]
 [ext_resource path="res://Game.gd" type="Script" id=4]
 [ext_resource path="res://HUD.tscn" type="PackedScene" id=5]
+[ext_resource path="res://sounds/change.wav" type="AudioStream" id=6]
+[ext_resource path="res://sounds/select.wav" type="AudioStream" id=7]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 4 )
@@ -21,7 +22,6 @@ position = Vector2( 358, 189 )
 
 [node name="White" parent="." instance=ExtResource( 1 )]
 position = Vector2( 170, 442 )
-script = ExtResource( 3 )
 
 [node name="HUD" parent="." instance=ExtResource( 5 )]
 
@@ -36,6 +36,12 @@ position = Vector2( 134, 113 )
 __meta__ = {
 "_gizmo_extents_": 180.5
 }
+
+[node name="Select_sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+
+[node name="Change_sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
 
 [connection signal="catch_up" from="Black" to="." method="_on_catch_up"]
 [connection signal="catch_up" from="White" to="." method="_on_catch_up"]
